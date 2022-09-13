@@ -50,7 +50,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AllUser'
+                $ref: "#/components/schemas/AllUser"
   /users/{userid}:
     get:
       tags:
@@ -76,9 +76,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
         "400":
           description: bad input parameter
+    post:
+      tags:
+        - admins
+      summary: add a user
+      description: Adds a user to the system
+      operationId: create_user
+      parameters:
+        - name: userid
+          in: path
+          description: USER ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
+      requestBody:
+        description: User item to add
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewUser"
+      responses:
+        "200":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewUser"
+        "409":
+          description: an existing item already exists
+
 components:
   schemas:
     AllUser:
@@ -89,7 +122,7 @@ components:
         user:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
     User:
       required:
         - id
@@ -106,3 +139,15 @@ components:
         last_active:
           type: string
           example: "1360031222"
+    NewUser:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Jean Eustache"
+        id:
+          type: string
+          example: "jean_eustache"
