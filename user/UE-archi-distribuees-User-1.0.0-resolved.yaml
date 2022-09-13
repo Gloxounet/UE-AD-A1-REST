@@ -1,0 +1,108 @@
+---
+openapi: 3.0.0
+info:
+  title: Showtime API
+  description: This is the API of the Showtime service
+  contact:
+    email: helene.coullon@imt-atlantique.fr
+  license:
+    name: GPL v3
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Showtime/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: https://virtserver.swaggerhub.com/UE-archi-distribuees/Movie/1.0.0
+    description: SwaggerHub API Auto Mocking
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /:
+    get:
+      tags:
+        - developers
+      summary: home page of the service
+      description: |
+        Nothing to do
+      operationId: home
+      responses:
+        "200":
+          description: welcome message
+          content:
+            text/html:
+              schema:
+                type: string
+                example: <h1>Test</h1>
+  /users:
+    get:
+      tags:
+        - developers
+      summary: get the full JSON database
+      description: |
+        Nothing to do
+      operationId: get_users
+      responses:
+        "200":
+          description: full JSON
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllUser'
+  /users/{userid}:
+    get:
+      tags:
+        - developers
+      summary: get the user by ID
+      description: |
+        Get the user for a given ID
+      operationId: get_user_byid
+      parameters:
+        - name: userid
+          in: path
+          description: date.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: bad input parameter
+components:
+  schemas:
+    AllUser:
+      required:
+        - user
+      type: object
+      properties:
+        user:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    User:
+      required:
+        - id
+        - name
+        - last_active
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Jean Eustache"
+        id:
+          type: string
+          example: "jean_eustache"
+        last_active:
+          type: string
+          example: "1360031222"

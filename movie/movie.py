@@ -10,12 +10,13 @@ PORT = 3200
 HOST = '0.0.0.0'
 
 with open('{}/databases/movies.json'.format("."), "r") as jsf:
-   movies = json.load(jsf)["movies"]
+    movies = json.load(jsf)["movies"]
+
 
 # root message
 @app.route("/", methods=['GET'])
 def home():
-    return make_response("<h1 style='color:blue'>Welcome to the Movie service!</h1>",200)
+    return make_response("<h1 style='color:blue'>Welcome to the Movie service!</h1>", 200)
 
 @app.route("/json", methods=['GET'])
 def get_json():
@@ -86,8 +87,22 @@ def get_movies_rated_above_five():
             movie_list.append(movie)
     return make_response(jsonify(movie_list),400)
 
+@app.route("/moviesbydirector", methods=['GET'])
+def get_movie_bydirector():
+    json = []
+    if request.args:
+        req = request.args
+        for movie in movies:
+            if str(movie["director"]) == str(req["director"]):
+                json.append(movie)
+
+    if not json:
+        res = make_response(jsonify({"error": "movie director not found"}), 400)
+    else:
+        res = make_response(jsonify(json), 200)
+    return res
 
 if __name__ == "__main__":
-    #p = sys.argv[1]
-    print("Server running in port %s"%(PORT))
+    # p = sys.argv[1]
+    print("Server running in port %s" % (PORT))
     app.run(host=HOST, port=PORT)
