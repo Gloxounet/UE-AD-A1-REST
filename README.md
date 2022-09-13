@@ -1,3 +1,6 @@
 # UE-AD-A1-REST
 
-test
+TP Flask, REST et OpenAPI
+
+BOËLLE Octave
+GLOCK Matteo
