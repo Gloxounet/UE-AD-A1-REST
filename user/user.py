@@ -51,10 +51,10 @@ def create_user(userid):
 @app.route("/booking/<userid>")
 def get_users_booking(userid):
    try :
-      res = requests.get(f'{BOOKING_URL}/booking/{userid}')
+      res = requests.get(f'{BOOKING_URL}/bookings/{userid}')
    except :
       return make_response(jsonify({'error':'error fetching booking microservice'}),400)
-   if not(res.ok) : return make_response(jsonify(res["error"]),400)
+   if not(res.ok) : return make_response(jsonify({'error':'error user don\'t have bookings'}),400)
    response = json.loads(res.text)
 
    return make_response(jsonify(response["dates"]),200)
