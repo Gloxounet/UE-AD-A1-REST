@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, jsonify, make_response
-import requests
 import json
-from werkzeug.exceptions import NotFound
 import time
+
+import requests
+from flask import Flask, jsonify, make_response, render_template, request
 
 app = Flask(__name__)
 
