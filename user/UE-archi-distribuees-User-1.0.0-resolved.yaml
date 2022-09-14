@@ -111,6 +111,60 @@ paths:
                 $ref: "#/components/schemas/NewUser"
         "409":
           description: an existing item already exists
+  /booking/{userid}:
+    get:
+      tags:
+        - developers
+      summary: get all the booking dates made by the user
+      description: |
+        Get the booking date of an user given its ID
+      operationId: get_users_booking
+      parameters:
+        - name: userid
+          in: path
+          description: date.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
+      responses:
+        "200":
+          description: Dates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dates"
+        "400":
+          description: bad input
+  /allmoviesbooked/{userid}:
+    get:
+      summary: get all the movies that the user booked
+      description: |
+        Get all the movies that the user booked given its ID
+      operationId: get_all_movies_booked
+      parameters:
+        - name: userid
+          in: path
+          description: date.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 1
+            minimum: 1
+            type: string
+      responses:
+        "200":
+          description: Movies
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Movies"
+        "400":
+          description: bad input
 
 components:
   schemas:
@@ -151,3 +205,47 @@ components:
         id:
           type: string
           example: "jean_eustache"
+    DateItem:
+      required:
+        - date
+        - movies
+      type: object
+      properties:
+        date:
+          type: string
+          example: "20151201"
+        movies:
+          type: array
+          items:
+            type: string
+            example: 276c79ec-a26a-40a6-b3d3-fb242a5947b6
+    Dates:
+      type: array
+      items:
+        $ref: "#/components/schemas/DateItem"
+
+    MovieItem:
+      required:
+        - director
+        - rating
+        - title
+        - id
+      type: object
+      properties:
+        title:
+          type: string
+          example: The Martian
+        rating:
+          type: string
+          example: "7"
+        director:
+          type: string
+          example: Paul McGuigan
+        id:
+          type: string
+          example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
+
+    Movies:
+      type: array
+      items:
+        $ref: "#/components/schemas/MovieItem"

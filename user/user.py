@@ -53,8 +53,8 @@ def get_users_booking(userid):
    try :
       res = requests.get(f'{BOOKING_URL}/booking/{userid}')
    except :
-      return make_response(jsonify({'error':'error fetching booking microservice'}))
-   if not(res.ok) : return make_response(jsonify(res["error"]))
+      return make_response(jsonify({'error':'error fetching booking microservice'}),400)
+   if not(res.ok) : return make_response(jsonify(res["error"]),400)
    response = json.loads(res.text)
 
    return make_response(jsonify(response["dates"]),200)
