@@ -62,6 +62,7 @@ def get_movie_byid(movieid):
             return res
 
     imdb = fetchMovieByIdIMDb(movieid)
+    print(imdb)
     if imdb != None : return make_response(jsonify(imdb),200)
 
     return make_response(jsonify({"error":"Movie ID not found"}),400)
