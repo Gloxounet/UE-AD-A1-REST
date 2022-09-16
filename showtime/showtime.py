@@ -2,6 +2,16 @@ from flask import Flask, render_template, request, jsonify, make_response
 import json
 from werkzeug.exceptions import NotFound
 
+#.env imports
+from dotenv import load_dotenv
+from pathlib import Path
+import os
+
+#Getting env variables
+dotenv_path = Path('../.env')
+load_dotenv(dotenv_path=dotenv_path)
+IMDB_API_KEY = os.getenv('IMDB_KEY')
+
 app = Flask(__name__)
 
 PORT = 3202

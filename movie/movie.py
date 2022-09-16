@@ -4,11 +4,22 @@ import json
 import sys
 from werkzeug.exceptions import NotFound
 
+#.env imports
+from dotenv import load_dotenv
+from pathlib import Path
+import os
+
+#Getting env variables
+dotenv_path = Path('../.env')
+load_dotenv(dotenv_path=dotenv_path)
+IMDB_API_KEY = os.getenv('IMDB_KEY')
+
 app = Flask(__name__)
 
 PORT = 3200
 HOST = '0.0.0.0'
 
+#Loading small db
 with open('{}/databases/movies.json'.format("."), "r") as jsf:
     movies = json.load(jsf)["movies"]
 

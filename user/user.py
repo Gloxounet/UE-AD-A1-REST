@@ -4,8 +4,20 @@ import time
 import requests
 from flask import Flask, jsonify, make_response, render_template, request
 
+#.env imports
+from dotenv import load_dotenv
+from pathlib import Path
+import os
+
+#Getting env variables
+dotenv_path = Path('../.env')
+load_dotenv(dotenv_path=dotenv_path)
+IMDB_API_KEY = os.getenv('IMDB_KEY')
+
+#Flask app
 app = Flask(__name__)
 
+#Variables
 PORT = 3203
 HOST = '0.0.0.0'
 MOVIE_URL = "http://localhost:3200"
