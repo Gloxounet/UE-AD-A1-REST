@@ -1,8 +1,8 @@
+from unittest import result
 from urllib import response
 from flask import Flask, render_template, request, jsonify, make_response
 import json
-import sys
-from werkzeug.exceptions import NotFound
+import requests
 
 #.env imports
 from dotenv import load_dotenv
@@ -18,6 +18,9 @@ app = Flask(__name__)
 
 PORT = 3200
 HOST = '0.0.0.0'
+#IMDb variables
+IMDB_LINK = f"https://imdb-api.com/en/API/"
+
 
 #Loading small db
 with open('{}/databases/movies.json'.format("."), "r") as jsf:
@@ -40,21 +43,34 @@ def get_movie_byid(movieid):
         if str(movie["id"]) == str(movieid):
             res = make_response(jsonify(movie),200)
             return res
+
     return make_response(jsonify({"error":"Movie ID not found"}),400)
 
 @app.route("/moviesbytitle", methods=['GET'])
 def get_movie_bytitle():
-    json = ""
-    if request.args:
-        req = request.args
-        for movie in movies:
-            if str(movie["title"]) == str(req["title"]):
-                json = movie
+    if not(request.args) or request.args["title"]=="": return make_response(jsonify({'error':'invalid arguments'}),400)
 
-    if not json:
-        res = make_response(jsonify({"error":"movie title not found"}),400)
-    else:
-        res = make_response(jsonify(json),200)
+    req = request.args
+    title = req["title"]
+    link = IMDB_LINK + f"SearchMovie/{IMDB_API_KEY}/"+title
+
+    resp = json.loads(requests.get(link).text)
+    results = resp["results"]
+    
+    movie_list = list(map(lambda movie:fetchMovieByIdIMDb(movie["id"]),results))
+
+    return make_response(jsonify({"movies":movie_list}),200)
+
+def fetchMovieByIdIMDb(_id:str):
+    link = IMDB_LINK + f"Title/{IMDB_API_KEY}/"+_id
+    movie = json.loads(requests.get(link).text)
+    res = {
+        "director":movie["directors"],
+        "rating":movie["imDbRating"],
+        "title":movie["title"],
+        "id":movie["id"]
+        }
+    
     return res
 
 @app.route("/movies/<movieid>", methods=['POST'])
