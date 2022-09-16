@@ -37,12 +37,32 @@ def get_json():
     res = make_response(jsonify(movies), 200)
     return res
 
+
+def fetchMovieByIdIMDb(_id:str):
+    try :
+        link = IMDB_LINK + f"Title/{IMDB_API_KEY}/"+_id
+        movie = json.loads(requests.get(link).text)
+        res = {
+            "director":movie["directors"],
+            "rating":movie["imDbRating"],
+            "title":movie["title"],
+            "id":movie["id"]
+            }
+        return res
+    except KeyError :
+        return None
+    
+    
+
 @app.route("/movies/<movieid>", methods=['GET'])
 def get_movie_byid(movieid):
     for movie in movies:
         if str(movie["id"]) == str(movieid):
             res = make_response(jsonify(movie),200)
             return res
+
+    imdb = fetchMovieByIdIMDb(movieid)
+    if imdb != None : return make_response(jsonify(imdb),200)
 
     return make_response(jsonify({"error":"Movie ID not found"}),400)
 
@@ -61,17 +81,6 @@ def get_movie_bytitle():
 
     return make_response(jsonify({"movies":movie_list}),200)
 
-def fetchMovieByIdIMDb(_id:str):
-    link = IMDB_LINK + f"Title/{IMDB_API_KEY}/"+_id
-    movie = json.loads(requests.get(link).text)
-    res = {
-        "director":movie["directors"],
-        "rating":movie["imDbRating"],
-        "title":movie["title"],
-        "id":movie["id"]
-        }
-    
-    return res
 
 @app.route("/movies/<movieid>", methods=['POST'])
 def create_movie(movieid):
