@@ -25,11 +25,13 @@ def home():
     return "<h1 style='color:blue'>Welcome to the Showtime service!</h1>"
 
 
+# Gets all the datas from the JSON
 @app.route("/showtime", methods=['GET'])
 def get_schedule():
     return make_response(jsonify(schedule), 200)
 
 
+# Gets the schedule for a given date
 @app.route("/showtime/<date>")
 def get_movie_by_date(date):
     date = str(date)

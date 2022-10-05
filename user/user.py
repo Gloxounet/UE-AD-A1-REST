@@ -32,11 +32,13 @@ def home():
     return "<h1 style='color:blue'>Welcome to the User service!</h1>"
 
 
+# Gets all the users datas from the JSON
 @app.route("/users", methods=['GET'])
 def get_users():
     return make_response(jsonify(users), 200)
 
 
+# Gets user datas from its ID
 @app.route("/users/<userid>", methods=['GET'])
 def get_user_by_id(userid):
     for user in users:
@@ -45,6 +47,7 @@ def get_user_by_id(userid):
     return make_response(jsonify({'error': 'id not found'}))
 
 
+# Create a user from a given ID
 @app.route("/users/<userid>", methods=['POST'])
 def create_user(userid):
     req = request.get_json()
@@ -64,6 +67,7 @@ def create_user(userid):
     return res
 
 
+# Get user bookings from the user ID
 @app.route("/booking/<userid>")
 def get_users_booking(userid):
     try:
@@ -76,6 +80,7 @@ def get_users_booking(userid):
     return make_response(jsonify(response["dates"]), 200)
 
 
+# Get the movies booked from the user ID
 @app.route("/allmoviesbooked/<userid>")
 def get_all_movies_booked(userid):
     try:

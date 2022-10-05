@@ -25,10 +25,14 @@ def home():
     return "<h1 style='color:blue'>Welcome to the Booking service!</h1>"
 
 
+# List all the bookings
+
 @app.route("/bookings", methods=['GET'])
 def get_json():
     return make_response(jsonify(bookings), 200)
 
+
+# Get the bookings for the user corresponding to <userid>
 
 @app.route("/bookings/<userid>", methods=['GET'])
 def get_booking_for_user(userid):
@@ -39,6 +43,7 @@ def get_booking_for_user(userid):
     return make_response(jsonify({"error": "booking ID not found"}), 400)
 
 
+# Add a booking for the user corresponding to <userid>
 @app.route("/bookings/<userid>", methods=['POST'])
 def add_booking_by_user(userid):
     req = request.get_json()
