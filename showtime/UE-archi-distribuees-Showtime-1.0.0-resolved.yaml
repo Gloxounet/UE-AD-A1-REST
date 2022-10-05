@@ -36,7 +36,7 @@ paths:
               schema:
                 type: string
                 example: <h1>Test</h1>
-  /showtimes:
+  /showtime:
     get:
       tags:
       - developers
@@ -51,14 +51,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AllSchedule'
-  /showmovies/{date}:
+  /showtime/{date}:
     get:
       tags:
       - developers
       summary: get the schedule by date
       description: |
         Get the schedule for a given date
-      operationId: get_movies_bydate
+      operationId: get_movies_by_date
       parameters:
       - name: date
         in: path

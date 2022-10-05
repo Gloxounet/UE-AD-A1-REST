@@ -72,7 +72,7 @@ paths:
       summary: get the movie by its id
       description: |
         By passing in the appropriate options, you can get info of a Movie
-      operationId: get_movie_byid
+      operationId: get_movie_by_id
       parameters:
         - name: movieid
           in: path
@@ -154,7 +154,7 @@ paths:
       summary: get the movie by its title
       description: |
         By passing in the appropriate options, you can get Movie info
-      operationId: get_movie_bytitle
+      operationId: get_movie_by_title
       parameters:
         - name: title
           in: query
@@ -183,7 +183,7 @@ paths:
       summary: get movies by its director
       description: |
         By passing in the appropriate options, you can get Movie info
-      operationId: get_movie_bydirector
+      operationId: get_movie_by_director
       parameters:
         - name: title
           in: query

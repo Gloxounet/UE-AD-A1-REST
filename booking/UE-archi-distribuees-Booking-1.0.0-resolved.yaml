@@ -84,7 +84,7 @@ paths:
       - admins
       summary: add a booking for a user
       description: Adds a booking for the user
-      operationId: add_booking_byuser
+      operationId: add_booking_by_user
       parameters:
       - name: userid
         in: path
