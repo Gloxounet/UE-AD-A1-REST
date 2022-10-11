@@ -6,4 +6,6 @@ BOËLLE Octave
 GLOCK Matteo
 
 Le projet REST lance tout les services par un simple ```docker-compose up -d```
-Tout les appels sur les differents services sont à faire à la main 
+Tout les appels sur les differents services sont à faire à la main
+
+IMPORTANT : La clé API IMDB_KEY est a créer avant la composition
