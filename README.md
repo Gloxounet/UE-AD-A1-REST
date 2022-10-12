@@ -1,8 +1,8 @@
 # UE-AD-A1-REST
 
-## TP Flask, REST and OpenAPI
+TP Flask, REST and OpenAPI
 
-### How to dockerize
+## How to dockerize ?
 
 Run ```docker-compose up -d```
 This will launch all the services on their respective ports
