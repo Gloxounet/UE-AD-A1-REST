@@ -7,13 +7,13 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify, make_response
 
 # Getting env variables
-dotenv_path = Path('../.env')
+dotenv_path = Path('../../.env')
 load_dotenv(dotenv_path=dotenv_path)
 IMDB_API_KEY = os.getenv('IMDB_KEY')
 
 app = Flask(__name__)
 
-PORT = 3201
+PORT = os.getenv('BOOKING_PORT')
 HOST = '0.0.0.0'
 
 with open('{}/databases/bookings.json'.format("."), "r") as jsf:

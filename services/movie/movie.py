@@ -8,13 +8,15 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify, make_response
 
 # Getting env variables
-dotenv_path = Path('../.env')
+dotenv_path = Path('../../.env')
 load_dotenv(dotenv_path=dotenv_path)
+
+# Getting env variables
 IMDB_API_KEY = os.getenv('IMDB_KEY')
 
 app = Flask(__name__)
 
-PORT = 3200
+PORT = os.getenv('MOVIE_PORT')
 HOST = '0.0.0.0'
 # IMDb variables
 IMDB_LINK = f"https://imdb-api.com/en/API/"
@@ -71,19 +73,15 @@ def get_movie_by_id(movieid):
 # Gets the movie datas from its title
 @app.route("/moviesbytitle", methods=['GET'])
 def get_movie_by_title():
-    if not request.args or request.args["title"] == "": return make_response(jsonify({'error': 'invalid arguments'}),
-                                                                             400)
+    if not request.args or request.args["title"] == "":
+        return make_response(jsonify({'error': 'invalid arguments'}), 400)
 
-    req = request.args
-    title = req["title"]
-    link = IMDB_LINK + f"SearchMovie/{IMDB_API_KEY}/" + title
+    for movie in movies:
+        if str(movie["title"]) == str(request.args["title"]):
+            res = make_response(jsonify(movie), 200)
+            return res
 
-    resp = json.loads(requests.get(link).text)
-    results = resp["results"]
-
-    movie_list = list(map(lambda movie: fetch_movie_by_id_imdb(movie["id"]), results))
-
-    return make_response(jsonify({"movies": movie_list}), 200)
+    return make_response(jsonify({"error": "Movie ID not found"}), 400)
 
 
 # Creates a movie from the data given in a POST
@@ -148,7 +146,7 @@ def get_movie_by_director():
     if not directors:
         res = make_response(jsonify({"error": "movie director not found"}), 400)
     else:
-        res = make_response(jsonify(json), 200)
+        res = make_response(jsonify(directors), 200)
     return res
 
 

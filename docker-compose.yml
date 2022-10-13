@@ -3,24 +3,36 @@ services:
   movie:
     environment:
       - IMDB_KEY="$IMDB_KEY"
-    build: ./movie/
+      - MOVIE_PORT=${MOVIE_PORT}
+    build: services/movie/
     ports:
-      - "3200:3200"
+      - "${MOVIE_PORT}:${MOVIE_PORT}"
+
   showtime:
     environment:
-      - IMDB_KEY="$IMDB_KEY"
-    build: ./showtime/
+      - SHOWTIME_PORT=${SHOWTIME_PORT}
+    build: services/showtime/
     ports:
-      - "3202:3202"
+      - "${SHOWTIME_PORT}:${SHOWTIME_PORT}"
+
   user:
     environment:
-      - IMDB_KEY="$IMDB_KEY"
-    build: ./user/
+      - MOVIE_PORT=${MOVIE_PORT}
+      - USER_PORT=${USER_PORT}
+      - BOOKING_PORT=${BOOKING_PORT}
+    build: services/user/
     ports:
-      - "3203:3203"
+      - "${USER_PORT}:${USER_PORT}"
+    depends_on:
+      - booking
+      - movie
+
   booking:
     environment:
-      - IMDB_KEY="$IMDB_KEY"
-    build: ./booking/
+      - BOOKING_PORT=${BOOKING_PORT}
+      - SHOWTIME_PORT=${SHOWTIME_PORT}
+    build: services/booking/
     ports:
-      - "3201:3201"
+      - "${BOOKING_PORT}:${BOOKING_PORT}"
+    depends_on:
+      - showtime

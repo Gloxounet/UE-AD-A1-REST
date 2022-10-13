@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, make_response, request
 
 # Getting env variables
-dotenv_path = Path('../.env')
+dotenv_path = Path('../../.env')
 load_dotenv(dotenv_path=dotenv_path)
 IMDB_API_KEY = os.getenv('IMDB_KEY')
 
@@ -17,11 +17,15 @@ IMDB_API_KEY = os.getenv('IMDB_KEY')
 app = Flask(__name__)
 
 # Variables
-PORT = 3203
+PORT = os.getenv('USER_PORT')
 HOST = '0.0.0.0'
-MOVIE_URL = "http://localhost:3200"
-BOOKING_URL = "http://localhost:3201"
-BASE_URL = f"http://localhost:{PORT}"
+
+MOVIE_PORT = os.getenv('MOVIE_PORT')
+BOOKING_PORT = os.getenv('BOOKING_PORT')
+
+MOVIE_URL = f"http://movie:{MOVIE_PORT}"
+BOOKING_URL = f"http://booking:{BOOKING_PORT}"
+BASE_URL = f"http://{HOST}:{PORT}"
 
 with open('{}/databases/users.json'.format("."), "r") as jsf:
     users = json.load(jsf)["users"]
@@ -30,7 +34,6 @@ with open('{}/databases/users.json'.format("."), "r") as jsf:
 @app.route("/", methods=['GET'])
 def home():
     return "<h1 style='color:blue'>Welcome to the User service!</h1>"
-
 
 # Gets all the users datas from the JSON
 @app.route("/users", methods=['GET'])
@@ -42,7 +45,7 @@ def get_users():
 @app.route("/users/<userid>", methods=['GET'])
 def get_user_by_id(userid):
     for user in users:
-        if str(userid) == str(user["id"]):
+        if userid == user["id"]:
             return make_response(jsonify(user), 200)
     return make_response(jsonify({'error': 'id not found'}))
 
@@ -70,6 +73,7 @@ def create_user(userid):
 # Get user bookings from the user ID
 @app.route("/booking/<userid>")
 def get_users_booking(userid):
+    print(f'{BOOKING_URL}/bookings/{userid}')
     try:
         res = requests.get(f'{BOOKING_URL}/bookings/{userid}')
     except:
@@ -89,9 +93,11 @@ def get_all_movies_booked(userid):
         return make_response(jsonify({'error': 'error fetching user microservice'}))
 
     dates = json.loads(res.text)
+    print(dates)
 
     movie_list = []
     for date in dates:
+        print(date)
         for movie in date["movies"]:
             try:
                 res = json.loads(requests.get(f'{MOVIE_URL}/movies/{movie}').text)

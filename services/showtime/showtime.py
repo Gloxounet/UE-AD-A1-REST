@@ -7,13 +7,13 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, make_response
 
 # Getting env variables
-dotenv_path = Path('../.env')
+dotenv_path = Path('../../.env')
 load_dotenv(dotenv_path=dotenv_path)
 IMDB_API_KEY = os.getenv('IMDB_KEY')
 
 app = Flask(__name__)
 
-PORT = 3202
+PORT = os.getenv('SHOWTIME_PORT')
 HOST = '0.0.0.0'
 
 with open('{}/databases/times.json'.format("."), "r") as jsf:
@@ -32,7 +32,7 @@ def get_schedule():
 
 
 # Gets the schedule for a given date
-@app.route("/showtime/<date>")
+@app.route("/showtime/<date>", methods=['GET'])
 def get_movie_by_date(date):
     date = str(date)
     movies = []
@@ -40,7 +40,7 @@ def get_movie_by_date(date):
         if int(s["date"]) == int(date):
             movies.append(s["movies"])
     if movies != "":
-        return make_response(jsonify(json), 200)
+        return make_response(jsonify(movies), 200)
 
     return make_response(jsonify({'error': 'not found'}))
 
